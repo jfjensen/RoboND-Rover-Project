@@ -81,10 +81,14 @@ def perspect_transform(img, src, dst):
     return warped
 
 def ground_extract(img):
-    return color_threshold(img, (160,160,160), (255,255,255))
+    # return color_threshold(img, (160,160,160), (255,255,255))
+    return color_threshold(img, (140,150,150), (255,255,255))
 
 def obstacles_extract(img):
-    return color_threshold(img, (1,1,1), (159,159,159))
+    # return color_threshold(img, (1,1,1), (159,159,159))
+    # return color_threshold(img, (1,1,1), (70,60,50))
+    return color_threshold(img, (1,1,1), (60,60,60))
+
 
 def rocks_extract(img):
     return color_threshold(img, (130,100,0), (200,200,70))
@@ -117,19 +121,19 @@ def perception_step(Rover):
     # NOTE: camera image is coming to you in Rover.img
     image = Rover.img
     # 1) Define source and destination points for perspective transform
-    source = np.float32([[12, 141], [118, 96], [200,96], [300,141]])
-    destination = np.float32([[150, 150], [150,140] ,[160,140], [160, 150]])
-    # dst_size = 5 
-    # # Set a bottom offset to account for the fact that the bottom of the image 
-    # # is not the position of the rover but a bit in front of it
-    # # this is just a rough guess, feel free to change it!
-    # bottom_offset = 6
-    # source = np.float32([[14, 140], [301 ,140],[200, 96], [118, 96]])
-    # destination = np.float32([[image.shape[1]/2 - dst_size, image.shape[0] - bottom_offset],
-    #                   [image.shape[1]/2 + dst_size, image.shape[0] - bottom_offset],
-    #                   [image.shape[1]/2 + dst_size, image.shape[0] - 2*dst_size - bottom_offset], 
-    #                   [image.shape[1]/2 - dst_size, image.shape[0] - 2*dst_size - bottom_offset],
-    #                   ])
+    # source = np.float32([[12, 141], [118, 96], [200,96], [300,141]])
+    # destination = np.float32([[150, 150], [150,140] ,[160,140], [160, 150]])
+    dst_size = 5 
+    # Set a bottom offset to account for the fact that the bottom of the image 
+    # is not the position of the rover but a bit in front of it
+    # this is just a rough guess, feel free to change it!
+    bottom_offset = 6
+    source = np.float32([[14, 140], [301 ,140],[200, 96], [118, 96]])
+    destination = np.float32([[image.shape[1]/2 - dst_size, image.shape[0] - bottom_offset],
+                      [image.shape[1]/2 + dst_size, image.shape[0] - bottom_offset],
+                      [image.shape[1]/2 + dst_size, image.shape[0] - 2*dst_size - bottom_offset], 
+                      [image.shape[1]/2 - dst_size, image.shape[0] - 2*dst_size - bottom_offset],
+                      ])
     # 2) Apply perspective transform
     persp_transf = perspect_transform(Rover.img, source, destination)
     # 3) Apply color threshold to identify navigable terrain/obstacles/rock samples
@@ -161,9 +165,12 @@ def perception_step(Rover):
     navigable_x_world, navigable_y_world = pix_to_world(xpix_grnd, ypix_grnd, Rover.pos[0], Rover.pos[1], 
                                     Rover.yaw, world_size, scale)
     # 7) Update Rover worldmap (to be displayed on right side of screen)
-    Rover.worldmap[obstacle_y_world, obstacle_x_world, 0] += 1
-    Rover.worldmap[rock_y_world, rock_x_world, 1] += 1
-    Rover.worldmap[navigable_y_world, navigable_x_world, 2] += 1
+    limit = 2.0
+    if (((abs(Rover.pitch) < limit)| (abs(Rover.pitch) > (360.0 - limit))) & 
+        ((abs(Rover.roll) < limit)| (abs(Rover.roll) > (360.0 - limit)))):
+        Rover.worldmap[obstacle_y_world, obstacle_x_world, 0] += 1
+        Rover.worldmap[rock_y_world, rock_x_world, 1] += 1
+        Rover.worldmap[navigable_y_world, navigable_x_world, 2] += 1
     # Rover.worldmap[y_world, x_world,2] += 1
     # 8) Convert rover-centric pixel positions to polar coordinates
     rover_centric_pixel_distances, rover_centric_angles = to_polar_coords(xpix_grnd, ypix_grnd)
