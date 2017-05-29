@@ -82,10 +82,11 @@ def perspect_transform(img, src, dst):
 
 def ground_extract(img):
     return color_threshold(img, (160,160,160), (255,255,255))
-    # return color_threshold(img, (140,150,150), (255,255,255))
+    # return color_threshold(img, (155,155,155), (255,255,255))
 
 def obstacles_extract(img):
     return color_threshold(img, (1,1,1), (160,160,160))
+    # return color_threshold(img, (1,1,1), (155,155,155))
     # return color_threshold(img, (1,1,1), (70,60,50))
     # return color_threshold(img, (1,1,1), (60,60,60))
     # return color_threshold(img, (1,1,1), (30,30,30))
@@ -172,6 +173,7 @@ def perception_step(Rover):
         ((abs(Rover.roll) < limit)| (abs(Rover.roll) > (360.0 - limit)))):
         Rover.worldmap[obstacle_y_world, obstacle_x_world, 0] += 1
         Rover.worldmap[navigable_y_world, navigable_x_world, 2] += 1
+        Rover.worldmap[navigable_y_world, navigable_x_world, 0] = 0 # remove obstacles
     # Rover.worldmap[y_world, x_world,2] += 1
     # 8) Convert rover-centric pixel positions to polar coordinates
     rover_centric_pixel_distances, rover_centric_angles = to_polar_coords(xpix_grnd, ypix_grnd)
