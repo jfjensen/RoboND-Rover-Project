@@ -81,12 +81,12 @@ def perspect_transform(img, src, dst):
     return warped
 
 def ground_extract(img):
-    return color_threshold(img, (160,160,160), (255,255,255))
-    # return color_threshold(img, (155,155,155), (255,255,255))
+    # return color_threshold(img, (160,160,160), (255,255,255))
+    return color_threshold(img, (165,165,165), (255,255,255))
 
 def obstacles_extract(img):
-    return color_threshold(img, (1,1,1), (160,160,160))
-    # return color_threshold(img, (1,1,1), (155,155,155))
+    # return color_threshold(img, (1,1,1), (160,160,160))
+    return color_threshold(img, (1,1,1), (150,150,150))
     # return color_threshold(img, (1,1,1), (70,60,50))
     # return color_threshold(img, (1,1,1), (60,60,60))
     # return color_threshold(img, (1,1,1), (30,30,30))
