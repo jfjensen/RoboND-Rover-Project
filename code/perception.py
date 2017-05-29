@@ -81,13 +81,14 @@ def perspect_transform(img, src, dst):
     return warped
 
 def ground_extract(img):
-    # return color_threshold(img, (160,160,160), (255,255,255))
-    return color_threshold(img, (140,150,150), (255,255,255))
+    return color_threshold(img, (160,160,160), (255,255,255))
+    # return color_threshold(img, (140,150,150), (255,255,255))
 
 def obstacles_extract(img):
-    # return color_threshold(img, (1,1,1), (159,159,159))
+    return color_threshold(img, (1,1,1), (160,160,160))
     # return color_threshold(img, (1,1,1), (70,60,50))
-    return color_threshold(img, (1,1,1), (60,60,60))
+    # return color_threshold(img, (1,1,1), (60,60,60))
+    # return color_threshold(img, (1,1,1), (30,30,30))
 
 
 def rocks_extract(img):
@@ -165,10 +166,10 @@ def perception_step(Rover):
     navigable_x_world, navigable_y_world = pix_to_world(xpix_grnd, ypix_grnd, Rover.pos[0], Rover.pos[1], 
                                     Rover.yaw, world_size, scale)
     # 7) Update Rover worldmap (to be displayed on right side of screen)
-    limit = 2.0
+    limit = 0.5#1.0
     if (((abs(Rover.pitch) < limit)| (abs(Rover.pitch) > (360.0 - limit))) & 
         ((abs(Rover.roll) < limit)| (abs(Rover.roll) > (360.0 - limit)))):
-        Rover.worldmap[obstacle_y_world, obstacle_x_world, 0] += 1
+        # Rover.worldmap[obstacle_y_world, obstacle_x_world, 0] += 1
         Rover.worldmap[rock_y_world, rock_x_world, 1] += 1
         Rover.worldmap[navigable_y_world, navigable_x_world, 2] += 1
     # Rover.worldmap[y_world, x_world,2] += 1
