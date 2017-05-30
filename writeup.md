@@ -78,7 +78,7 @@ def color_threshold(img, lower_thresh, upper_thresh):
 ```
 
 This function is called with different thresholds for each of the 3 different cases:
-1. **Ground extraction** which is implemented in `ground_extraction()`. Lower RGB threshold (165,165,165) and upper RGB threshold (255,255,255)
+1. **Ground extraction** which is implemented in `ground_extraction()`. Lower RGB threshold (160,160,160) and upper RGB threshold (255,255,255)
 2. **Obstacle extraction** which is implemented in `obstacles_extract()`. Lower RGB threshold (1,1,1) and upper RGB threshold (150,150,150)
 3. **(Yellow) Rock extraction** which is implemented in `rocks_extract()`.  Lower RGB threshold (130,100,0) and upper RGB threshold (200,200,70)
 
@@ -160,9 +160,11 @@ The code of the function `perception_step()` in `perception.py` has been modifie
 
 #### 2. Launching in autonomous mode your rover can navigate and map autonomously.  Explain your results and how you might improve them in your writeup.  
 
-The simulator was run in autonomous mode at a frame rate between 29 and 35 fps and in a window with a resolution of 1280x768 at 'Fantastic' graphics quality.
+The simulator was run in autonomous mode at a frame rate between 29 and 35 fps and in a window with a resolution of 1280x768 at 'Fantastic' graphics quality. 
 
 The robot is capable of mapping more than 40% of the terrain at more than 60% fidelity. Sometimes the fidelity starts out below 60% but then it quickly goes up above 60%.
+
+A demo video can be found [here](https://youtu.be/JYbaht1_TJU).
 
 In addition it happens that the robot rover gets stuck for a short while (a few seconds) when rotating away from certain obstacles. Despite this it manages to get loose and continue its exploration.
 
